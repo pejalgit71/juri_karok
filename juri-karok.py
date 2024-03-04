@@ -19,7 +19,7 @@ formside.form_submit_button("Submit")
 from streamlit_gsheets import GSheetsConnection
 conn = st.connection("gsheets", type=GSheetsConnection)
 # menu_df = conn.read(spreadsheet=url,nrows=7,  worksheet="menu")
-peserta_df = conn.read(nrows=7, usecols=list(range(5)), ttl="1m",  worksheet="peserta")
+peserta_df = conn.read(nrows=8, usecols=list(range(5)), ttl="1m",  worksheet="peserta")
 # menu_df = pd.read_csv("menu.csv")
 
 if (choose == "Markah"):
