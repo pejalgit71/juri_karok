@@ -64,7 +64,7 @@ if (choose == "Markah"):
 if (choose == "Admin"):
     edited_peserta = pd.DataFrame()
     edited_peserta["nama"] = st.data_editor(
-        peserta_df["nama"]
+        peserta_df["nama"], num_rows="dynamic"
     )
     if st.button('Klik Sini Untuk Kemaskini'):
         peserta_df["nama"]=edited_peserta["nama"]
