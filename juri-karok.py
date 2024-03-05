@@ -23,10 +23,14 @@ peserta_df = conn.read(nrows=8, usecols=list(range(5)), ttl="1m",  worksheet="pe
 # menu_df = pd.read_csv("menu.csv")
 
 if (choose == "Markah"):
-    col1, col2, col3= st.columns(3)
+    container1 = st.container(border=True)
+    container2 = st.container(border=True)
+    col1, col2, col3= container1.columns(3)
+    col4, col5, col6= container2.columns(3)
+    
     col1.subheader("Peserta Karaoke")
-    col2.subheader("Markah")
-    col3.subheader("Pemenang")
+    col2.subheader("Jumlah Besar Markah")
+    col3.subheader("Sisihan Markah ")
     peserta_df = pd.DataFrame(peserta_df)
     peserta_df = peserta_df.dropna(subset=["nama"])
     peserta_df = peserta_df.reset_index(drop=True)
@@ -52,15 +56,33 @@ if (choose == "Markah"):
     peserta_df = peserta_df.sort_values(by='markah', ascending=False)
     peserta_df = peserta_df.reset_index(drop=True)
     peserta_df.index = peserta_df.index+1
+
+    edited_peserta = edited_peserta.sort_values(by='persembahan', ascending=False)
+    edited_peserta = edited_peserta.reset_index(drop=True)
+    edited_peserta.index = edited_peserta.index+1
+   
     # pemenang1 = peserta_df[peserta_df["markah"] == peserta_df["markah"].nlargest(1)+][["nama", "markah"]] 
     # pemenang2 = peserta_df[peserta_df["markah"] == peserta_df["markah"].max(2).idxmin(), axis=0][["nama", "markah"]] 
     # pemenang1 = peserta_df["markah"].max()
     # pemenang2 = peserta_df["markah"]
     col3.write(peserta_df[["nama","markah"]])
-    st.subheader("No 1 adalah : " + str (peserta_df["nama"][1]))
-    st.subheader("No 2 adalah : " + str(peserta_df["nama"][2]))
-    st.subheader("No 3 adalah : " + str(peserta_df["nama"][3]))
-    
+   
+    if col4.button("Klik untuk kira pemenang"):
+        col4.subheader("No 1 adalah : " + str (peserta_df["nama"][1]))
+        col4.subheader("No 2 adalah : " + str(peserta_df["nama"][2]))
+        col4.subheader("No 3 adalah : " + str(peserta_df["nama"][3]))
+        col4.balloons()
+        col4.snow()
+        
+    if col5.button("Klik untuk kira Persembahan Terbaik"):
+        col5.subheader("No 1 adalah : " + str(edited_peserta["nama"][1]))
+        col5.balloons()
+
+    peserta = col6.text_input('Tulis nama peserta')
+    if col6.button('Cari'):
+        have_it = peserta.lower() in list(map(str.lower,peserta_df["nama"]))
+        col6.write('Jumpa!') if have_it else col6.write('Tak jumpa nama tuh')
+
 if (choose == "Admin"):
     edited_peserta = pd.DataFrame()
     edited_peserta["nama"] = st.data_editor(
